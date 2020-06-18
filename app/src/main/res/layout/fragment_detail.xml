@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Create by platform eight on 2020. 6. 4.
+  ~  Copyright (c) 2019. platform eight. All rights reserved.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/order_detail_menu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/order_detail_menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:text="base menuname" />
+
+    <TextView
+        android:id="@+id/order_detail_menu_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/order_detail_menu_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:text="0,000" />
+</LinearLayout>

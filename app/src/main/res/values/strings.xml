@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Coffee</string>
+    <string name="app_name_kor">아아</string>
+
+    <string name="nav_header_desc">이미지</string>
+    <string name="nav_header_title">로그인해주세요</string>
+    <string name="nav_header_subtitle">0</string>
+    <string name="menu_myinfo">내 정보</string>
+    <string name="menu_myorders">주문조회</string>
+    <string name="menu_settings">설정</string>
+    <string name="menu_login">로그인</string>
+    <string name="menu_logout">로그아웃</string>
+
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'아아\'.</string>
+    <string name="permission_required_toast">Location permission is required for this.</string>
+
+    <string name="order_btn_cart_keep">담아두기</string>
+    <string name="order_btn_cart_open">장바구니</string>
+    <string name="order_category_text1">기본</string>
+    <string name="order_text_category2">추가선택</string>
+    <string name="order_text_category3">수량</string>
+    <string name="order_text_cautionmessage">※방문까지 5분이상이 소요되지 않게 주의해주세요</string>
+    <string name="sign_plus">+</string>
+    <string name="sign_minus">-</string>
+    <string name="cart_name">장바구니</string>
+    <string name="cart_del">삭제</string>
+
+
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">아이디 (8문자이상)</string>
+    <string name="prompt_password">비밀번호 (8문자이상)</string>
+    <string name="prompt_password_check">비밀번호 체크</string>
+    <string name="action_sign_in">회원등록</string>
+    <string name="action_sign_in_short">로그인</string>
+    <string name="welcome">" 으로 로그인합니다. "</string>
+    <string name="invalid_username">허용되지 않은 아이디입니다.</string>
+    <string name="invalid_input">허용되지 않은 입력입니다.</string>
+    <string name="invalid_password">패스워드는 8 문자이상필요합니다.</string>
+    <string name="invalid_password2">패스워드가 틀립니다.</string>
+    <string name="login_failed">"로그인에 실패하였습니다."</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Create by platform eitght on 2019. 9. 18.
+  ~ Copyright (c) 2019. platform eight. All rights reserved.
+  -->
+
+<network-security-config>
+    <!--Set application-wide security config using base-config tag.-->
+    <base-config cleartextTrafficPermitted="true"/>
+</network-security-config>
