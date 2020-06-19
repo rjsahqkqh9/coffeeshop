@@ -11,6 +11,7 @@ import android.util.Log;
 public class MyApplication extends Application {
 
     public static MemberData user;
+    public static String device_token;
 
     @Override
     public void onCreate() {
@@ -21,6 +22,7 @@ public class MyApplication extends Application {
     private void initializeData() {
         //설정 읽어오기 user 자동로그인
         user = new MemberData();
+        device_token = "";
         //autologin();
     }
 

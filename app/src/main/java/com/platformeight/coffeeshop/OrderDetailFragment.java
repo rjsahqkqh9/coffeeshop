@@ -137,6 +137,7 @@ public class OrderDetailFragment extends Fragment {
                                         try {
                                             //TODO:: 확인다이얼로그 후 coffee_order isCheck 'Y' 및 FCM전송
                                             new ServerHandle().setOrderCheck(order.getInt("no"), 1, true);
+                                            new ServerHandle().sendFCM(order.getInt("member_no"), "coffee_members");
                                             mListener.onListFragmentInteraction();
                                         } catch (JSONException e) {
                                             e.printStackTrace();

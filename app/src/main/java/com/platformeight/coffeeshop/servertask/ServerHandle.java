@@ -21,6 +21,7 @@ import static com.platformeight.coffeeshop.Constant.member_select;
 import static com.platformeight.coffeeshop.Constant.orderlist_user;
 import static com.platformeight.coffeeshop.Constant.register_failure;
 import static com.platformeight.coffeeshop.Constant.register_success;
+import static com.platformeight.coffeeshop.Constant.server_name;
 
 public class ServerHandle {
 
@@ -34,7 +35,7 @@ public class ServerHandle {
         json = new JSONObject();
     }
     /*
-     * 회원정보관련
+     * 점포 관리용
      */
     public String login(String id,String pass) { //id, pass //커피집 용도
         url = local_name+"shop_login_select.php";
@@ -81,6 +82,30 @@ public class ServerHandle {
     * 가게관련
      */
 
+    public String setToken(int no, String table, String token){
+        url = local_name+"token_update.php";
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("table", table);
+            json.put("token", token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result.contains(register_failure)){
+            Log.d(TAG, "register sql query: "+result);
+        }else if (result.contains("failure")){
+            Log.d(TAG, "register connection : "+result);
+        }
+        return result;
+    }
     /*
      * 주문 처리
      */
@@ -137,5 +162,25 @@ public class ServerHandle {
         }
         Log.d(TAG, "setOrderCheck: "+result);
         return result;
+    }
+
+    public boolean sendFCM(int no, String table) {
+        url = server_name+"fcm test.php";
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("table", table);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "sendFCM: "+result);
+        return !result.contains("failure");
     }
 }

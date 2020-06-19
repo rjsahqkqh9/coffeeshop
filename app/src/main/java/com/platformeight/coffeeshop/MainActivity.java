@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -23,7 +24,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.platformeight.coffeeshop.servertask.ServerHandle;
 import com.platformeight.coffeeshop.ui.login.LoginActivity;
 
@@ -73,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         btn_list1.setOnClickListener(this);
         btn_list2.setOnClickListener(this);
         fragmentManager = getSupportFragmentManager();
+
     }
     private void initialView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -137,8 +143,33 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
                 if( user.getNo() < 1 || user == null ) return;
                 tv_name.setText(user.getName());
                 btn_list1.performClick();
+
+                //TODO:: 정보수정 기기등록 페이지로 이동시킬것
+                getToken("coffee_shops");
             }
         }
+    }
+
+    private void getToken(String table) {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d(TAG, msg);
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, new ServerHandle().setToken(user.getNo(),table,token));
+                    }
+                });
     }
 
     @Override
