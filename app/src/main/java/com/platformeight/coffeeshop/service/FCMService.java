@@ -60,7 +60,7 @@ public class FCMService extends FirebaseMessagingService {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
     }
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -104,8 +104,9 @@ public class FCMService extends FirebaseMessagingService {
      */
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
-        if (user.getNo()>0) new ServerHandle().setToken(user.getNo(),"coffee_shos",token);
-        else device_token = token;
+        //토큰갱신 등록할지 다이얼로그
+        //if (user.getNo()>0) new ServerHandle().setToken(user.getNo(),"coffee_shos",token);
+        //else device_token = token;
     }
 
     /**
@@ -113,7 +114,7 @@ public class FCMService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -124,7 +125,8 @@ public class FCMService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_baseline_notifications_none_24)
-                        .setContentTitle(getString(R.string.fcm_message))
+                        //.setContentTitle(getString(R.string.fcm_message))
+                        .setContentTitle(title)
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -142,5 +144,11 @@ public class FCMService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
+
+    @Override
+    public void onDeletedMessages() {
+        Log.d(TAG, "onDeletedMessages: coffeeshop");
+        super.onDeletedMessages();
     }
 }

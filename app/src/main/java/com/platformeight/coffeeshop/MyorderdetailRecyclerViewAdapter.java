@@ -18,9 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.List;
 
-import static com.platformeight.coffeeshop.Constant.format;
+import static com.platformeight.coffeeshop.Constant.DECIMAL_FORMAT;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link }.
@@ -57,7 +56,7 @@ public class MyorderdetailRecyclerViewAdapter extends RecyclerView.Adapter<Myord
             }
             holder.name.setText(info);
             holder.quan.setText(holder.mItem.getString("amount"));
-            holder.price.setText(format.format(holder.mItem.getInt("price")));
+            holder.price.setText(DECIMAL_FORMAT.format(holder.mItem.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

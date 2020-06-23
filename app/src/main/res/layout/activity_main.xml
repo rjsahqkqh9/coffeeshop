@@ -62,7 +62,7 @@
             android:orientation="horizontal">
             <Button
                 android:id="@+id/myorder_btn_list1"
-                android:text="주문내역"
+                android:text="주문대기"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:background="@color/colorWhite"
@@ -76,6 +76,20 @@
                 android:background="@color/colorBrown" />
             <Button
                 android:id="@+id/myorder_btn_list2"
+                android:text="주문확인"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:background="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="false"/>
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/colorBrown" />
+            <Button
+                android:id="@+id/myorder_btn_list3"
                 android:text="완료내역"
                 android:textSize="24sp"
                 android:textStyle="bold"

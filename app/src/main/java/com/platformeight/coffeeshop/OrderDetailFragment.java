@@ -6,7 +6,6 @@
 package com.platformeight.coffeeshop;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,8 +29,8 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
-import static com.platformeight.coffeeshop.Constant.format;
-import static com.platformeight.coffeeshop.Constant.myorders;
+import static com.platformeight.coffeeshop.Constant.DECIMAL_FORMAT;
+import static com.platformeight.coffeeshop.Constant.MYORDERS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +49,10 @@ public class OrderDetailFragment extends Fragment {
     private String mParam2;
 
     private OrderDetailFragment.OnListFragmentInteractionListener mListener;
+
+    private JSONObject order;
+    private int state;
+    private char check;
 
 
     public OrderDetailFragment() {
@@ -90,6 +93,7 @@ public class OrderDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
         TextView name = view.findViewById(R.id.order_detail_name);
         TextView address = view.findViewById(R.id.order_detail_address);
+        TextView time = view.findViewById(R.id.order_detail_time);
 
         TextView total_quan = view.findViewById(R.id.order_detail_total_quantity);
         TextView total_price = view.findViewById(R.id.order_detail_total_price);
@@ -99,11 +103,12 @@ public class OrderDetailFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null && !bundle.isEmpty()) {
-            String myorder = bundle.getString(myorders);
+            String myorder = bundle.getString(MYORDERS);
             try {
-                JSONObject order = new JSONObject(myorder);
+                order = new JSONObject(myorder);
                 name.setText(order.getString("name"));
                 address.setText(order.getString("phone"));
+                time.setText(order.getString("order_time"));
 
                 /*
                 ListView listView = (ListView) view.findViewById(R.id.order_detail_list);
@@ -117,46 +122,60 @@ public class OrderDetailFragment extends Fragment {
                     layout.addView(setlist(ja,i));
 
                 total_quan.setText(order.getString("order_amount"));
-                total_price.setText(format.format(order.getInt("order_price")));
+                total_price.setText(DECIMAL_FORMAT.format(order.getInt("order_price")));
 
-                point.setText(format.format(order.getInt("order_point")));
-                price.setText(format.format(order.getInt("total_price")));
+                point.setText(DECIMAL_FORMAT.format(order.getInt("order_point")));
+                price.setText(DECIMAL_FORMAT.format(order.getInt("total_price")));
 
-                Button btn_check = view.findViewById(R.id.order_detail_btn_check);
-                btn_check.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("주문확인")
-                                .setMessage("확인하셨습니까?")
-                                .setIcon(android.R.drawable.ic_dialog_info)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        // 확인시 처리 로직
-                                        //Toast.makeText(getContext(), "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                                        try {
-                                            //TODO:: 확인다이얼로그 후 coffee_order isCheck 'Y' 및 FCM전송
-                                            new ServerHandle().setOrderCheck(order.getInt("no"), 1, true);
-                                            new ServerHandle().sendFCM(order.getInt("member_no"), "coffee_members");
-                                            mListener.onListFragmentInteraction();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }})
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        // 취소시 처리 로직
-                                        Toast.makeText(getContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
-                                    }})
-                                .show();
-                    }
-                });
+                state = order.getInt("state");
+                check = order.getString("isCheck").charAt(0);
+                switch (state + check){
+                    case 'Y':
+                        Button btn_check = view.findViewById(R.id.order_detail_btn_check);
+                        btn_check.setOnClickListener(v -> mListener.onListFragmentInteraction());
+                        break;
+                    case 1+'Y':
+                        setButton(view, getString(R.string.order_detail_done_dialog),"주문완료", false);
+                        break;
+                    case 1+'N':
+                        setButton(view, getString(R.string.order_detail_check_dialog),"주문확인", true);
+                        break;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
         return view;
+    }
+    private void setButton(View view, String message, String btn_text, boolean c){
+        Button btn_check = view.findViewById(R.id.order_detail_btn_check);
+        btn_check.setText(btn_text);
+        btn_check.setOnClickListener(v -> new AlertDialog.Builder(getContext())
+                .setTitle(btn_text)
+                .setMessage(message)
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                    // 확인시 처리 로직
+                    //Toast.makeText(getContext(), "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                    try {
+                        //TODO:: 확인다이얼로그 후 coffee_order isCheck 'Y' 및 FCM전송
+                        String result = new ServerHandle().setOrderCheck(order.getInt("no"), (c)?1:0, true);
+                        if (!result.contains("failure")){
+                            new ServerHandle().sendFCM(order.getInt("member_no"), "coffee_members",(c)?"주문확인처리":"주문완료처리");
+                        } else {
+                            Toast.makeText(getContext(), "취소처리 알림\n주문변동사항을 감지하여 취소처리되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                        mListener.onListFragmentInteraction();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, (dialog, whichButton) -> {
+                    // 취소시 처리 로직
+                    Toast.makeText(getContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
+                })
+                .show());
     }
     private View setlist(JSONArray items, int position){
         LayoutInflater mLayoutInflater = LayoutInflater.from(getContext());
@@ -175,7 +194,7 @@ public class OrderDetailFragment extends Fragment {
             }
             name.setText(info);
             quan.setText(js.getString("amount"));
-            price.setText(format.format(js.getInt("price")));
+            price.setText(DECIMAL_FORMAT.format(js.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

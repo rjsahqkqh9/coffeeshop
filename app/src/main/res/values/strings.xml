@@ -23,14 +23,14 @@
     <string name="default_notification_channel_name" translatable="true">Weather</string>
     <!-- [END fcm_default_icon_string] -->
     <string name="msg_subscribe_failed">Failed to subscribe to weather topic</string>
-    <string name="fcm_message">FCM Message</string>
+    <string name="fcm_message">주문 알림</string>
 
     <!-- nav, menu -->
     <string name="nav_header_desc">이미지</string>
     <string name="nav_header_title">로그인해주세요</string>
     <string name="nav_header_subtitle">0</string>
-    <string name="menu_myinfo">내 정보</string>
-    <string name="menu_myorders">주문조회</string>
+    <string name="menu_myinfo">점포정보</string>
+    <string name="menu_bank">정산계좌</string>
     <string name="menu_settings">설정</string>
     <string name="menu_login">로그인</string>
     <string name="menu_logout">로그아웃</string>
@@ -60,5 +60,7 @@
     <string name="invalid_password">패스워드는 8 문자이상필요합니다.</string>
     <string name="invalid_password2">패스워드가 틀립니다.</string>
     <string name="login_failed">"로그인에 실패하였습니다."</string>
+    <string name="order_detail_check_dialog">확인하셨습니까?</string>
+    <string name="order_detail_done_dialog">음료가 제공되었습니까?</string>
 
 </resources>

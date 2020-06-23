@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.platformeight.coffeeshop.Constant.myorders;
+import static com.platformeight.coffeeshop.Constant.MYORDERS;
 
 /**
  * A fragment representing a list of Items.
@@ -86,7 +86,7 @@ public class OrderFragment extends Fragment {
 
             Bundle bundle = getArguments();
             if (bundle != null && !bundle.isEmpty()) {
-                order_json = bundle.getString(myorders);
+                order_json = bundle.getString(MYORDERS);
                 order = new ArrayList<JSONObject>();
                 try {
                     JSONArray ja = new JSONArray(order_json);

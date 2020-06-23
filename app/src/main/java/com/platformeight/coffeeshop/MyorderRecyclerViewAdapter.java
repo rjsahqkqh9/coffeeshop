@@ -47,12 +47,28 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
         //holder.mIdView.setText(mValues.get(position).id);
         //holder.mContentView.setText(mValues.get(position).content);
         try {
+            int state = holder.mItem.getInt("state");
+            char check = holder.mItem.getString("isCheck").charAt(0);
+            switch (state + check){
+                case 0 + 'Y':
+                    holder.mStateView.setText("주문완료");
+                    break;
+                case 1+'Y':
+                    holder.mStateView.setText("주문확인");
+                    //setButton(view, "주문이 정상처리되었습니까?","주문완료", false);
+                    break;
+                case 1+'N':
+                    holder.mStateView.setText("주문대기");
+                    //setButton(view, "확인하셨습니까?","주문확인", true);
+                    break;
+            }
+
             holder.mOrderView.setText(holder.mItem.getString("name"));
             holder.mAddressView.setText(holder.mItem.getString("phone"));
             String name = new JSONArray(holder.mItem.getString("detail")).getJSONObject(0).getString("name");
             String info = String.format("%s 외 %d개\n총 결제금액 : %s원\n%s", name,
                     holder.mItem.getInt("order_amount"),
-                    Constant.format.format(holder.mItem.getInt("total_price")),
+                    Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
                     holder.mItem.getString("order_time"));
             holder.mInfoView.setText(info);
             //holder.mInfoView.setText(holder.mItem.getString("info"));
@@ -93,6 +109,7 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final TextView mStateView;
         public final TextView mOrderView;
         public final TextView mAddressView;
         public final TextView mInfoView;
@@ -102,6 +119,7 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mStateView = (TextView) view.findViewById(R.id.order_state);
             mOrderView = (TextView) view.findViewById(R.id.order_title);
             mAddressView = (TextView) view.findViewById(R.id.order_address);
             mInfoView = (TextView) view.findViewById(R.id.order_info);

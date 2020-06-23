@@ -34,9 +34,9 @@ import com.platformeight.coffeeshop.ui.login.LoginActivity;
 
 import org.json.JSONObject;
 
-import static com.platformeight.coffeeshop.Constant.login_state;
-import static com.platformeight.coffeeshop.Constant.myorders;
-import static com.platformeight.coffeeshop.Constant.result_login;
+import static com.platformeight.coffeeshop.Constant.LOGIN_STATE;
+import static com.platformeight.coffeeshop.Constant.MYORDERS;
+import static com.platformeight.coffeeshop.Constant.RESULT_LOGIN;
 import static com.platformeight.coffeeshop.MyApplication.user;
 
 public class MainActivity extends AppCompatActivity implements OrderFragment.OnListFragmentInteractionListener, OrderDetailFragment.OnListFragmentInteractionListener, View.OnClickListener {
@@ -50,11 +50,13 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     private FragmentManager fragmentManager;
     private OrderFragment orderFragment1;
     private OrderFragment orderFragment2;
+    private OrderFragment orderFragment3;
     private FragmentTransaction transaction;
 
     private TextView tv_name;
     private Button btn_list1;
     private Button btn_list2;
+    private Button btn_list3;
 
     private int btn_state;
     private int flag_detail;
@@ -73,10 +75,11 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         if( user.getNo() < 1 ){
             mLoginForm = false;
             Intent intent = new Intent(context, LoginActivity.class);
-            startActivityForResult(intent, result_login);
+            startActivityForResult(intent, RESULT_LOGIN);
         }
         btn_list1.setOnClickListener(this);
         btn_list2.setOnClickListener(this);
+        btn_list3.setOnClickListener(this);
         fragmentManager = getSupportFragmentManager();
 
     }
@@ -101,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
                     case R.id.account:
                         Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.order_List:
-                        Toast.makeText(context, title + ": 주문 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    case R.id.bank:
+                        Toast.makeText(context, title + ": 정산 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.setting:
                         Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         flag_detail = 0;
         btn_list1 = findViewById(R.id.myorder_btn_list1);
         btn_list2 = findViewById(R.id.myorder_btn_list2);
+        btn_list3 = findViewById(R.id.myorder_btn_list3);
         btn_list1.clearFocus();
     }
 
@@ -136,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == result_login && resultCode == RESULT_OK) { //로그인 결과
-            if (data.hasExtra(login_state)) {
-                this.mLoginForm = !data.getBooleanExtra(login_state,false);
+        if (requestCode == RESULT_LOGIN && resultCode == RESULT_OK) { //로그인 결과
+            if (data.hasExtra(LOGIN_STATE)) {
+                this.mLoginForm = !data.getBooleanExtra(LOGIN_STATE,false);
                 Log.d(TAG, "onActivityResult: "+mLoginForm);
                 if( user.getNo() < 1 || user == null ) return;
                 tv_name.setText(user.getName());
@@ -181,16 +185,26 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
                 //TODO: 내 주문내역 coffe_orders member_no
                 orderFragment1 = new OrderFragment();
                 //bundle.putString(menu, shop.getMenu());
-                setFragment(orderFragment1, new ServerHandle().getOrderList(user.getNo(),1));
+                setFragment(orderFragment1, new ServerHandle().getOrderList(user.getNo(),1, "N"));
                 btn_list1.setTextColor(Color.BLACK);
                 btn_list2.setTextColor(Color.GRAY);
+                btn_list3.setTextColor(Color.GRAY);
                 flag_detail=0;
                 break;
             case R.id.myorder_btn_list2:
                 orderFragment2 = new OrderFragment();
-                setFragment(orderFragment2, new ServerHandle().getOrderList(user.getNo(),0));
+                setFragment(orderFragment2, new ServerHandle().getOrderList(user.getNo(),1, "Y"));
                 btn_list1.setTextColor(Color.GRAY);
                 btn_list2.setTextColor(Color.BLACK);
+                btn_list3.setTextColor(Color.GRAY);
+                flag_detail=0;
+                break;
+            case R.id.myorder_btn_list3:
+                orderFragment3 = new OrderFragment();
+                setFragment(orderFragment3, new ServerHandle().getOrderList(user.getNo(),0, "Y"));
+                btn_list1.setTextColor(Color.GRAY);
+                btn_list2.setTextColor(Color.GRAY);
+                btn_list3.setTextColor(Color.BLACK);
                 flag_detail=0;
                 break;
             default:
@@ -198,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     }
     private void setFragment(OrderFragment orderFragment, String myorder){
         Bundle bundle = new Bundle(1);
-        bundle.putString(myorders, myorder);
+        bundle.putString(MYORDERS, myorder);
         orderFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.myorder_list, orderFragment).commitAllowingStateLoss();
@@ -216,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
          */
         OrderDetailFragment order = new OrderDetailFragment();
         Bundle bundle = new Bundle(1);
-        bundle.putString(myorders, item.toString());
+        bundle.putString(MYORDERS, item.toString());
         transaction = fragmentManager.beginTransaction();
         order.setArguments(bundle);
         transaction.replace(R.id.myorder_list, order).commitAllowingStateLoss();

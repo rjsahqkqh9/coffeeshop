@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import java.util.Iterator;
 
-import static com.platformeight.coffeeshop.Constant.format;
+import static com.platformeight.coffeeshop.Constant.DECIMAL_FORMAT;
 
 public class MyorderdetailAdapter extends BaseAdapter {
     Context mContext = null;
@@ -97,7 +97,7 @@ public class MyorderdetailAdapter extends BaseAdapter {
             }
             name.setText(info);
             quan.setText(js.getString("amount"));
-            price.setText(format.format(js.getInt("price")));
+            price.setText(DECIMAL_FORMAT.format(js.getInt("price")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

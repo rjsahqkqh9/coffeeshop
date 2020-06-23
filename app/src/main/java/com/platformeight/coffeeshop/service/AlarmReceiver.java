@@ -24,4 +24,5 @@ public class AlarmReceiver extends BroadcastReceiver {
             context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
         }
     }
+
 }

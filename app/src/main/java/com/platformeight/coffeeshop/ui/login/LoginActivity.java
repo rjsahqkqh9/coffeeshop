@@ -27,7 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.platformeight.coffeeshop.R;
 
-import static com.platformeight.coffeeshop.Constant.login_state;
+import static com.platformeight.coffeeshop.Constant.LOGIN_STATE;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = model.getDisplayName() + getString(R.string.welcome);
         // TODO : initiate successful logged in experience 로그인성공시
         Intent result = new Intent();
-        result.putExtra(login_state, true);
+        result.putExtra(LOGIN_STATE, true);
         setResult(Activity.RESULT_OK, result);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }

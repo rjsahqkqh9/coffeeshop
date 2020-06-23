@@ -8,11 +8,11 @@
             android:enabled="false"
             android:title="@string/menu_myinfo" />
         <item
-            android:id="@+id/order_List"
+            android:id="@+id/bank"
             android:icon="@drawable/ic_launcher_foreground"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:enabled="false"
-            android:title="@string/menu_myorders" />
+            android:title="@string/menu_bank" />
         <item
             android:id="@+id/setting"
             android:icon="@drawable/ic_launcher_foreground"
