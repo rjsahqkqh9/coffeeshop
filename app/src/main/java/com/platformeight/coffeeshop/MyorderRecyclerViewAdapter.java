@@ -67,7 +67,7 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
             holder.mAddressView.setText(holder.mItem.getString("phone"));
             String name = new JSONArray(holder.mItem.getString("detail")).getJSONObject(0).getString("name");
             String info = String.format("%s 외 %d개\n총 결제금액 : %s원\n%s", name,
-                    holder.mItem.getInt("order_amount"),
+                    holder.mItem.getInt("order_amount")-1,
                     Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
                     holder.mItem.getString("order_time"));
             holder.mInfoView.setText(info);

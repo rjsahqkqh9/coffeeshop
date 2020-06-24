@@ -23,6 +23,7 @@ import static com.platformeight.coffeeshop.Constant.orderlist_shop;
 import static com.platformeight.coffeeshop.Constant.ORDERLIST_SHOP;
 import static com.platformeight.coffeeshop.Constant.REGISTER_FAILURE;
 import static com.platformeight.coffeeshop.Constant.shop_login;
+import static com.platformeight.coffeeshop.Constant.shop_state_update;
 import static com.platformeight.coffeeshop.Constant.token_update;
 
 public class ServerHandle {
@@ -71,6 +72,7 @@ public class ServerHandle {
                 MyApplication.user.setName(tt.getString("name"));
                 MyApplication.user.setPromotion(tt.getInt("promotion"));
                 MyApplication.user.setState(tt.getInt("state"));
+                MyApplication.setDevice_token(tt.getString("token"));
             }
             if(result.equals("")) return "값없음";
         }
@@ -101,6 +103,31 @@ public class ServerHandle {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        if (result.contains(REGISTER_FAILURE)){
+            Log.d(TAG, "register sql query: "+result);
+        }else if (result.contains("failure")){
+            Log.d(TAG, "register connection : "+result);
+        }
+        return result;
+    }
+
+    public String setState(int no, int state){
+        url = shop_state_update;
+        json = new JSONObject();
+        try {
+            json.put("no", no);
+            json.put("state", state);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask(url, json);
+        String result = null;
+        try {
+            result = networkTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (result==null) return "null";
         if (result.contains(REGISTER_FAILURE)){
             Log.d(TAG, "register sql query: "+result);
         }else if (result.contains("failure")){

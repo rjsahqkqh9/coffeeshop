@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.platformeight.coffeeshop.R;
+import com.platformeight.coffeeshop.SharedPreference;
 
 import static com.platformeight.coffeeshop.Constant.LOGIN_STATE;
 
@@ -43,7 +45,26 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
+        final CheckBox remeber = findViewById(R.id.remember);
+        final CheckBox autologin = findViewById(R.id.autologin);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        if (SharedPreference.hasAttribute(this,"REMEMBER")){
+            if (SharedPreference.getAttribute(this, "REMEMBER").equals("true")){
+                remeber.setChecked(true);
+                usernameEditText.setText(SharedPreference.getAttribute(getApplicationContext(),"ID"));
+                passwordEditText.setText(SharedPreference.getAttribute(getApplicationContext(),"PASS"));
+                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+            }
+        }
+        if (SharedPreference.hasAttribute(this,"AUTO")){
+            autologin.setChecked(SharedPreference.getAttribute(this, "AUTO").equals("true"));
+        }
+        autologin.setOnClickListener(v -> {
+            if (((CheckBox)v).isChecked()){
+                remeber.setChecked(true);
+            }
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -73,6 +94,18 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 if (loginResult.getSuccess() != null) {
                     //Complete and destroy login activity once successful
+                    if (autologin.isChecked()) {
+                        SharedPreference.setAttribute(getApplicationContext(),"AUTO","true");
+                        SharedPreference.setAttribute(getApplicationContext(),"ID",usernameEditText.getText().toString());
+                        SharedPreference.setAttribute(getApplicationContext(),"PASS",passwordEditText.getText().toString());
+                    } else SharedPreference.setAttribute(getApplicationContext(),"AUTO","false");
+                    if (remeber.isChecked()) {
+                        SharedPreference.setAttribute(getApplicationContext(),"REMEMBER","true");
+                        SharedPreference.setAttribute(getApplicationContext(),"ID",usernameEditText.getText().toString());
+                        SharedPreference.setAttribute(getApplicationContext(),"PASS",passwordEditText.getText().toString());
+                    } else {
+                        SharedPreference.setAttribute(getApplicationContext(),"REMEMBER","false");
+                    }
                     updateUiWithUser(loginResult.getSuccess());
                     finish();
                 }

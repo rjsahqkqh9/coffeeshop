@@ -31,7 +31,7 @@
     <string name="nav_header_subtitle">0</string>
     <string name="menu_myinfo">점포정보</string>
     <string name="menu_bank">정산계좌</string>
-    <string name="menu_settings">설정</string>
+    <string name="menu_settings">설정(토큰설정:현재기기로 푸시받음)</string>
     <string name="menu_login">로그인</string>
     <string name="menu_logout">로그아웃</string>
 

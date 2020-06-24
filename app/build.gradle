@@ -9,9 +9,8 @@ android {
         applicationId "com.platformeight.coffeeshop"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 2
+        versionName "1.001b"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

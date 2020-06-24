@@ -74,7 +74,7 @@ public class FCMService extends FirebaseMessagingService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(token);
+        //sendRegistrationToServer(token);
     }
 
     /**
@@ -105,7 +105,7 @@ public class FCMService extends FirebaseMessagingService {
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
         //토큰갱신 등록할지 다이얼로그
-        //if (user.getNo()>0) new ServerHandle().setToken(user.getNo(),"coffee_shos",token);
+        if (user.getNo()>0) new ServerHandle().setToken(user.getNo(),"coffee_shos",token);
         //else device_token = token;
     }
 
