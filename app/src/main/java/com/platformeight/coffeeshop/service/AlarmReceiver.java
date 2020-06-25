@@ -21,7 +21,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         if(intent.getAction().equals(BOOT_ACTION))
         {
             Log.d(TAG, "BOOT_ACTION : alarm service ON");
-            context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
+            //context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
+            Intent service = new Intent(context, FCMService.class);
+            service.setPackage("com.platformeight.coffeeshop.service");
+            context.startService(service);
+
         }
     }
 

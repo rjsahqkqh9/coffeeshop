@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
                         Log.d(TAG, msg);
                         //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                         Log.d(TAG, new ServerHandle().setToken(user.getNo(),table,token));
+                        //context.startService(new Intent("com.google.firebase.MESSAGING_EVENT"));
                     }
                 });
     }
@@ -271,6 +272,11 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         order.setArguments(bundle);
         transaction.replace(R.id.myorder_list, order).commitAllowingStateLoss();
         flag_detail = 1;
+    }
+    @Override
+    public void onListFragmentInteraction(int index) {
+        //갱신
+        this.onClick(findViewById(btn_state));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

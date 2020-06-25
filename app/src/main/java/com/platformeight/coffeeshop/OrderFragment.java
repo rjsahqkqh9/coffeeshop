@@ -102,6 +102,26 @@ public class OrderFragment extends Fragment {
             recyclerView.setAdapter(new MyorderRecyclerViewAdapter(order, mListener));
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);
             recyclerView.addItemDecoration(dividerItemDecoration);
+
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_SETTLING){
+                        if (!recyclerView.canScrollVertically(-1)) {
+                            //새로고침
+                            Log.i(TAG, "Top of list");
+                            mListener.onListFragmentInteraction(0);
+                        } else if (!recyclerView.canScrollVertically(1)) {
+                            Log.i(TAG, "End of list");
+                            //리스트 더 보이기
+                            mListener.onListFragmentInteraction(0);
+                            //mListener.onListFragmentInteraction(한페이지크기);
+                        } else {
+                            //Log.i(TAG, "idle");
+                        }
+                    }
+                }
+            });
         }
         return view;
     }
@@ -134,5 +154,6 @@ public class OrderFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(JSONObject item);
+        void onListFragmentInteraction(int index);
     }
 }
