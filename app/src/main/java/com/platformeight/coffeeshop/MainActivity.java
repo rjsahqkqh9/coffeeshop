@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             Log.d(TAG, "initialData: "+isChecked);
             int state = 0;
             if (isChecked) state = 1;
-            Log.d(TAG, "initialData: "+new ServerHandle().setState(user.getNo(),state));
+            Log.d(TAG, "initialData: "+ new ServerHandle().setState(user.getNo(),state));
         });
         fragmentManager = getSupportFragmentManager();
         btn_list1.performClick();
@@ -107,43 +107,40 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                //menuItem.setChecked(true);
-                mDrawerLayout.closeDrawers();
-                int id = menuItem.getItemId();
-                String title = menuItem.getTitle().toString();
-                Intent intent=null;
-                switch (id){
-                    case R.id.account:
-                        Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "initialData: "+new ServerHandle().setState(user.getNo(),0));
-                        break;
-                    case R.id.bank:
-                        Toast.makeText(context, title + ": 정산 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.setting:
-                        //Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                        //TODO:: 정보수정 기기등록 페이지로 이동시킬것
-                        getToken("coffee_shops");
-                        break;
-                    case R.id.logout:
-                        //Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
-                        if (mLoginForm) { //로그인 및 회원가입
-                            intent = new Intent(context, LoginActivity.class);
-                            startActivityForResult(intent, RESULT_LOGIN);
-                        } else { //로그아웃시도
-                            mLoginForm = true;
-                            changeLogin();
-                            user = new MemberData();
-                            //finish();
-                            //Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
-                        }
-                        break;
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            //menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            int id = menuItem.getItemId();
+            String title = menuItem.getTitle().toString();
+            Intent intent=null;
+            switch (id){
+                case R.id.account:
+                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "initialData: "+new ServerHandle().setState(user.getNo(),0));
+                    break;
+                case R.id.bank:
+                    Toast.makeText(context, title + ": 정산 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.setting:
+                    //Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    //TODO:: 정보수정 기기등록 페이지로 이동시킬것
+                    getToken("coffee_shops");
+                    break;
+                case R.id.logout:
+                    //Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    if (mLoginForm) { //로그인 및 회원가입
+                        intent = new Intent(context, LoginActivity.class);
+                        startActivityForResult(intent, RESULT_LOGIN);
+                    } else { //로그아웃시도
+                        mLoginForm = true;
+                        changeLogin();
+                        user = new MemberData();
+                        //finish();
+                        //Toast.makeText(context, "로그아웃", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
             }
+            return false;
         });
 
         btn_list1 = findViewById(R.id.myorder_btn_list1);

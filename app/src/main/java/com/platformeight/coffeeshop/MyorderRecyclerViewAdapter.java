@@ -66,11 +66,18 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
             holder.mOrderView.setText(holder.mItem.getString("name"));
             holder.mAddressView.setText(holder.mItem.getString("phone"));
             String name = new JSONArray(holder.mItem.getString("detail")).getJSONObject(0).getString("name");
-            String info = String.format("%s 외 %d개\n총 결제금액 : %s원\n%s", name,
-                    holder.mItem.getInt("order_amount")-1,
-                    Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
-                    holder.mItem.getString("order_time"));
-            holder.mInfoView.setText(info);
+            if (holder.mItem.getInt("order_amount")-1 >0){
+                String info = String.format("%s 외 %d개\n총 결제금액 : %s원\n%s", name,
+                        holder.mItem.getInt("order_amount")-1,
+                        Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
+                        holder.mItem.getString("order_time"));
+                holder.mInfoView.setText(info);
+            } else {
+                String info = String.format("%s\n총 결제금액 : %s원\n%s", name,
+                        Constant.DECIMAL_FORMAT.format(holder.mItem.getInt("total_price")),
+                        holder.mItem.getString("order_time"));
+                holder.mInfoView.setText(info);
+            }
             //holder.mInfoView.setText(holder.mItem.getString("info"));
             /*
             JSONArray ja = new JSONArray(holder.mItem.getString("info"));

@@ -36,4 +36,13 @@
         <item name="android:layout_gravity">end</item>
         <item name="android:layout_weight">1</item>
     </style>
+
+    <style name="btn_theme" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="theme">@style/AccentButton</item>
+    </style>
+    <style name="AccentButton" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="colorButtonNormal">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorBrown</item>
+    </style>
 </resources>
