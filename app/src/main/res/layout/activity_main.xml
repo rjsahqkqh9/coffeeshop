@@ -54,6 +54,13 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/main_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="개점상태"
+            android:visibility="gone"/>
         <ToggleButton
             android:id="@+id/main_toggle_state"
             android:textOn="OPEN"
@@ -132,7 +139,6 @@
             app:layout_constraintRight_toRightOf="parent"
             tools:layout="@layout/fragment_order_list" />
     </LinearLayout>
-
     <View
         android:background="@color/colorBrown"
         android:layout_width="match_parent"

@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import static com.platformeight.coffeeshop.Constant.LOGIN_STATE;
 import static com.platformeight.coffeeshop.Constant.MYORDERS;
 import static com.platformeight.coffeeshop.Constant.RESULT_LOGIN;
+import static com.platformeight.coffeeshop.MyApplication.Main;
 import static com.platformeight.coffeeshop.MyApplication.mLoginForm;
 import static com.platformeight.coffeeshop.MyApplication.user;
 
@@ -51,12 +52,15 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     private Context context = this;
 
     private FragmentManager fragmentManager;
+    private OrderFragment orderFragment;
     private OrderFragment orderFragment1;
     private OrderFragment orderFragment2;
     private OrderFragment orderFragment3;
     private FragmentTransaction transaction;
 
     private TextView tv_name;
+    private TextView tv_state;
+    private TextView nav_name;
     private Button btn_list1;
     private Button btn_list2;
     private Button btn_list3;
@@ -96,17 +100,22 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         });
         fragmentManager = getSupportFragmentManager();
         btn_list1.performClick();
+        Main = this;
+
     }
+
     private void initialView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolBar = new ToolBarCustom(getSupportActionBar());
         toolBar.setTitleText((TextView) findViewById(R.id.toolbar_title), R.string.app_name_kor);
         tv_name = findViewById(R.id.main_name);
+        tv_state = findViewById(R.id.main_state);
         tg_state = findViewById(R.id.main_toggle_state);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        nav_name = navigationView.getHeaderView(0).findViewById(R.id.textView_Name);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             //menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
@@ -164,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             navigationView.getMenu().findItem(R.id.account).setEnabled(true);
             navigationView.getMenu().findItem(R.id.bank).setEnabled(true);
             tv_name.setText(user.getName()+"님 환영합니다.");
-            //nav_name.setText(user.getName());
+            nav_name.setText(user.getName());
             //nav_point.setText(""+user.getPoint());
             tg_state.setEnabled(true);
             tg_state.setChecked(user.getState() == 1);
@@ -217,25 +226,28 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             case R.id.myorder_btn_list1:
                 //TODO:주문내역 받아오기
                 //TODO: 내 주문내역 coffe_orders member_no
-                orderFragment1 = new OrderFragment();
+                orderFragment = new OrderFragment();
+                //orderFragment1 = new OrderFragment();
                 //bundle.putString(menu, shop.getMenu());
-                setFragment(orderFragment1, new ServerHandle().getOrderList(user.getNo(),1, "N"));
+                setFragment(orderFragment, new ServerHandle().getOrderList(user.getNo(),1, "N"));
                 btn_list1.setTextColor(Color.BLACK);
                 btn_list2.setTextColor(Color.GRAY);
                 btn_list3.setTextColor(Color.GRAY);
                 flag_detail=0;
                 break;
             case R.id.myorder_btn_list2:
-                orderFragment2 = new OrderFragment();
-                setFragment(orderFragment2, new ServerHandle().getOrderList(user.getNo(),1, "Y"));
+                orderFragment = new OrderFragment();
+                //orderFragment2 = new OrderFragment();
+                setFragment(orderFragment, new ServerHandle().getOrderList(user.getNo(),1, "Y"));
                 btn_list1.setTextColor(Color.GRAY);
                 btn_list2.setTextColor(Color.BLACK);
                 btn_list3.setTextColor(Color.GRAY);
                 flag_detail=0;
                 break;
             case R.id.myorder_btn_list3:
-                orderFragment3 = new OrderFragment();
-                setFragment(orderFragment3, new ServerHandle().getOrderList(user.getNo(),0, "Y"));
+                orderFragment = new OrderFragment();
+                //orderFragment3 = new OrderFragment();
+                setFragment(orderFragment, new ServerHandle().getOrderList(user.getNo(),0, "Y"));
                 btn_list1.setTextColor(Color.GRAY);
                 btn_list2.setTextColor(Color.GRAY);
                 btn_list3.setTextColor(Color.BLACK);
@@ -250,6 +262,17 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         orderFragment.setArguments(bundle);
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.myorder_list, orderFragment).commitAllowingStateLoss();
+    }
+    public void addFragmentData(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (btn_list1.getCurrentTextColor()==Color.BLACK) {
+                    String s = new ServerHandle().getOrderList(user.getNo(),1, "N");
+                    orderFragment.addData(s);
+                }
+            }
+        });
     }
 
     @Override

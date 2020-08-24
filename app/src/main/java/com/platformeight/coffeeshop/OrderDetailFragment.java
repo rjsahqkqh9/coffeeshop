@@ -130,7 +130,7 @@ public class OrderDetailFragment extends Fragment {
                 state = order.getInt("state");
                 check = order.getString("isCheck").charAt(0);
                 switch (state + check){
-                    case 'Y':
+                    case 'Y': //완료내역 뒤로가기
                         Button btn_check = view.findViewById(R.id.order_detail_btn_check);
                         btn_check.setOnClickListener(v -> mListener.onListFragmentInteraction());
                         break;
@@ -164,7 +164,7 @@ public class OrderDetailFragment extends Fragment {
                         if (!result.contains("failure")){
                             new ServerHandle().sendFCM(order.getInt("member_no"), "coffee_members",(c)?"주문확인처리":"주문완료처리");
                         } else {
-                            Toast.makeText(getContext(), "취소처리 알림\n주문변동사항을 감지하여 취소처리되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "취소처리 알림\n고객측 주문변동사항을 감지하여 취소처리되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                         mListener.onListFragmentInteraction();
                     } catch (JSONException e) {

@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -20,9 +21,11 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.platformeight.coffeeshop.MainActivity;
+import com.platformeight.coffeeshop.MyApplication;
 import com.platformeight.coffeeshop.R;
 import com.platformeight.coffeeshop.servertask.ServerHandle;
 
+import static com.platformeight.coffeeshop.MyApplication.Main;
 import static com.platformeight.coffeeshop.MyApplication.device_token;
 import static com.platformeight.coffeeshop.MyApplication.user;
 
@@ -126,7 +129,7 @@ public class FCMService extends FirebaseMessagingService {
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_baseline_notifications_none_24)
                         //.setContentTitle(getString(R.string.fcm_message))
-                        .setContentTitle(title)
+                        .setContentTitle(title).setColor(getColor(R.color.colorBrown))
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
@@ -144,6 +147,7 @@ public class FCMService extends FirebaseMessagingService {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        Main.addFragmentData();
     }
 
     @Override

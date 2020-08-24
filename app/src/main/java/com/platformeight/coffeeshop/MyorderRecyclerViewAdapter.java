@@ -17,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecyclerViewAdapter.ViewHolder> {
 
-    private final List<JSONObject> mValues;
+    private List<JSONObject> mValues;
     private final OrderFragment.OnListFragmentInteractionListener mListner;
 
     public MyorderRecyclerViewAdapter(List<JSONObject> items, OrderFragment.OnListFragmentInteractionListener listener) {
@@ -50,7 +51,7 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
             int state = holder.mItem.getInt("state");
             char check = holder.mItem.getString("isCheck").charAt(0);
             switch (state + check){
-                case 0 + 'Y':
+                case 'Y':
                     holder.mStateView.setText("주문완료");
                     break;
                 case 1+'Y':
@@ -107,11 +108,13 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
         });
 
     }
-
     @Override
     public int getItemCount() {
         if (mValues==null) return 0;
         return mValues.size();
+    }
+    public void addItem(List<JSONObject> items) {
+        mValues = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

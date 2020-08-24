@@ -68,11 +68,11 @@ public class OrderFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
-
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_list, container, false);
+        view = inflater.inflate(R.layout.fragment_order_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -114,8 +114,9 @@ public class OrderFragment extends Fragment {
                         } else if (!recyclerView.canScrollVertically(1)) {
                             Log.i(TAG, "End of list");
                             //리스트 더 보이기
-                            mListener.onListFragmentInteraction(0);
-                            //mListener.onListFragmentInteraction(한페이지크기);
+                            //mListener.onListFragmentInteraction(0);
+                            mListener.onListFragmentInteraction(recyclerView.getAdapter().getItemCount());
+                            //mListener.onListFragmentInteraction(itemcount 끝에크기);
                         } else {
                             //Log.i(TAG, "idle");
                         }
@@ -124,6 +125,21 @@ public class OrderFragment extends Fragment {
             });
         }
         return view;
+    }
+    public  void addData(String s) {
+        order = new ArrayList<JSONObject>();
+        try {
+            JSONArray ja = new JSONArray(s);
+            for(int i=0;i<ja.length();i++){
+                JSONObject js = (JSONObject) ja.get(i);
+                order.add(js);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RecyclerView rv = (RecyclerView) view;
+        ((MyorderRecyclerViewAdapter)rv.getAdapter()).addItem(order);
+        rv.getAdapter().notifyDataSetChanged();
     }
     @Override
     public void onAttach(Context context) {

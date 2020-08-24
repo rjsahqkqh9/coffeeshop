@@ -5,6 +5,7 @@
 
 package com.platformeight.coffeeshop;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.util.Log;
 
@@ -16,6 +17,8 @@ public class MyApplication extends Application {
     public static String device_token;
     public static boolean mLoginForm;
 
+    @SuppressLint("StaticFieldLeak")
+    public static MainActivity Main;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,6 +32,7 @@ public class MyApplication extends Application {
         device_token = "";
         autologin();
     }
+
     public static String getDevice_token() {
         return device_token;
     }
