@@ -6,6 +6,8 @@
 package com.platformeight.coffeeshop;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -50,16 +54,24 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
         try {
             int state = holder.mItem.getInt("state");
             char check = holder.mItem.getString("isCheck").charAt(0);
+
+            long minute = checkLimit(holder.mItem.getString("order_time")); //testline
+            //holder.mStateView.setTextColor(minute>20 ? Color.RED:Color.GRAY);
+            if (minute>20) holder.mStateView.setTextColor(Color.RED);
+            else if (minute>10) holder.mStateView.setTextColor(Color.YELLOW);
+            else holder.mStateView.setTextColor(Color.GRAY);
+            String caution = minute>30 ? "  "+minute+"분초과":"";
             switch (state + check){
                 case 'Y':
                     holder.mStateView.setText("주문완료");
+                    holder.mStateView.setTextColor(Color.GRAY);
                     break;
                 case 1+'Y':
-                    holder.mStateView.setText("주문확인");
+                    holder.mStateView.setText("주문확인"+caution);
                     //setButton(view, "주문이 정상처리되었습니까?","주문완료", false);
                     break;
                 case 1+'N':
-                    holder.mStateView.setText("주문대기");
+                    holder.mStateView.setText("주문대기"+caution);
                     //setButton(view, "확인하셨습니까?","주문확인", true);
                     break;
             }
@@ -115,6 +127,14 @@ public class MyorderRecyclerViewAdapter extends RecyclerView.Adapter<MyorderRecy
     }
     public void addItem(List<JSONObject> items) {
         mValues = items;
+    }
+    public long checkLimit(String time){ //10분 yellow 20분 red ~~분 경고 추가
+        LocalDateTime now = LocalDateTime.now();
+// 결과 : 2019-11-12
+        LocalDateTime order = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+// 결과 : 2019-12-13
+        //Log.d("", "checkLimit: "+ChronoUnit.HOURS.between(order, now)+"\n order : "+order+"   now : "+now);
+        return ChronoUnit.MINUTES.between(order, now);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

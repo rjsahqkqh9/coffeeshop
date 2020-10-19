@@ -58,9 +58,6 @@ public class RequestHttpURLConnection {
             }
         }
 
-        //sbParams.append("phone").append("=").append("01040").append("&");                 // php 변수에 값 대입
-        //sbParams.append("order_no").append("=").append("김소").append("&");   // php 변수 앞에 '$' 붙이지 않는다
-        //sbParams.append("address").append("=").append("대구시").append("&");           // 변수 구분은 '&' 사용
 
         /**
          * 2. HttpURLConnection을 통해 web의 데이터를 가져온다.
@@ -79,7 +76,7 @@ public class RequestHttpURLConnection {
             String strParams = sbParams.toString(); //sbParams에 정리한 파라미터들을 스트링으로 저장. 예)id=id1&pw=123;
             OutputStream os = urlConn.getOutputStream();
             //os.write(strParams.getBytes("UTF-8")); // 출력 스트림에 출력.
-            String param = "{\"phone\": \"01040\", \"order_no\" : \"김소\", \"address\" : \"대구시\"}";
+            String param = "{\"phone\": \"01040\", \"order_no\" : \"asdf\", \"address\" : \"대구시\"}";
             OutputStreamWriter osw = new OutputStreamWriter(os);
             osw.write(param);
             osw.flush();
@@ -137,9 +134,6 @@ public class RequestHttpURLConnection {
             sbParams.append(_params.toString());
         }
 
-        //sbParams.append("phone").append("=").append("01040").append("&");                 // php 변수에 값 대입
-        //sbParams.append("order_no").append("=").append("김소").append("&");   // php 변수 앞에 '$' 붙이지 않는다
-        //sbParams.append("address").append("=").append("대구시").append("&");           // 변수 구분은 '&' 사용
 
         /**
          * 2. HttpURLConnection을 통해 web의 데이터를 가져온다.

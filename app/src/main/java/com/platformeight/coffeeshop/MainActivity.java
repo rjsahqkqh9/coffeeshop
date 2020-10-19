@@ -26,6 +26,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -51,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     private NavigationView navigationView;
     private Context context = this;
 
+    private AdView mAdView;
+
     private FragmentManager fragmentManager;
     private OrderFragment orderFragment;
     private OrderFragment orderFragment1;
@@ -65,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     private Button btn_list2;
     private Button btn_list3;
     private ToggleButton tg_state;
+    private ToggleButton tg_remain;
 
     private int btn_state;
     private int flag_detail;
@@ -98,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             if (isChecked) state = 1;
             Log.d(TAG, "initialData: "+ new ServerHandle().setState(user.getNo(),state));
         });
+        tg_remain.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "initialData: "+isChecked);
+            int state = 0;
+            if (isChecked) state = 1;
+            Log.d(TAG, "initialData: "+ new ServerHandle().setSeat(user.getNo(),state));
+        });
         fragmentManager = getSupportFragmentManager();
         btn_list1.performClick();
         Main = this;
@@ -112,6 +126,14 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
         tv_name = findViewById(R.id.main_name);
         tv_state = findViewById(R.id.main_state);
         tg_state = findViewById(R.id.main_toggle_state);
+        tg_remain = findViewById(R.id.main_toggle_remain);
+
+        //-하단구글광고-
+        MobileAds.initialize(this, initializationStatus -> { });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        //-------------
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -125,13 +147,13 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             switch (id){
                 case R.id.account:
                     Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "initialData: "+new ServerHandle().setState(user.getNo(),0));
+                    //Log.d(TAG, "initialData: "+new ServerHandle().setState(user.getNo(),0));
                     break;
                 case R.id.bank:
                     Toast.makeText(context, title + ": 정산 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.setting:
-                    //Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, title + ": 알림토큰이 재설정 되었습니다.", Toast.LENGTH_SHORT).show();
                     //TODO:: 정보수정 기기등록 페이지로 이동시킬것
                     getToken("coffee_shops");
                     break;
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             //nav_name.setText(getString(R.string.nav_header_title));
             //nav_point.setText(getString(R.string.nav_header_subtitle));
             tg_state.setEnabled(false);
+            tg_remain.setEnabled(false);
         } else { //로그인성공
             mLoginForm = false;
             navigationView.getMenu().findItem(R.id.logout).setTitle(getString(R.string.menu_logout));
@@ -177,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
             //nav_point.setText(""+user.getPoint());
             tg_state.setEnabled(true);
             tg_state.setChecked(user.getState() == 1);
+            tg_remain.setEnabled(true);
+            tg_remain.setChecked(user.getSeat() == 1);
         }
 
     }
@@ -278,13 +303,6 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
     @Override
     public void onListFragmentInteraction(JSONObject item) {
         //상세정보출력
-        //Intent intent = new Intent(this, OrderDetailActivity.class);
-        //intent.putExtra(menu, item.toString());
-        //intent.putExtra(cart_items, cart_list);
-        //startActivity(intent);
-        /*
-
-         */
         OrderDetailFragment order = new OrderDetailFragment();
         Bundle bundle = new Bundle(1);
         bundle.putString(MYORDERS, item.toString());
@@ -305,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements OrderFragment.OnL
                 //super.onBackPressed();
                 //Toast.makeText(this, "서랍열기 ", Toast.LENGTH_SHORT).show();
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+            return true;
 
         }
         return super.onOptionsItemSelected(item);

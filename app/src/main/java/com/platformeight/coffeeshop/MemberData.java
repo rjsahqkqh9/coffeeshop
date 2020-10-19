@@ -18,6 +18,8 @@ public class MemberData {
 
     private int state;
 
+    private int seat;
+
     public int getNo() {
         return no;
     }
@@ -56,6 +58,14 @@ public class MemberData {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public int getSeat() {
+        return seat;
+    }
+
+    public void setSeat(int seat) {
+        this.seat = seat;
     }
 
     //  모델 복사

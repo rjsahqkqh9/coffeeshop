@@ -19,6 +19,7 @@ public final class Constant {
     public static final String orderlist_shop = server_name +folder + "orderlist_shop.php";
     public static final String order_check = server_name +folder + "order_check_shop.php";
     public static final String shop_state_update = server_name +folder + "shop_state_update.php";
+    public static final String shop_seat_update = server_name +folder + "shop_seat_update.php";
 
 
     public static final String token_update = server_name + "token_update.php";

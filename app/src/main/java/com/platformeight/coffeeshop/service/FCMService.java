@@ -10,23 +10,26 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.platformeight.coffeeshop.MainActivity;
-import com.platformeight.coffeeshop.MyApplication;
 import com.platformeight.coffeeshop.R;
 import com.platformeight.coffeeshop.servertask.ServerHandle;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.platformeight.coffeeshop.MyApplication.Main;
-import static com.platformeight.coffeeshop.MyApplication.device_token;
 import static com.platformeight.coffeeshop.MyApplication.user;
 
 public class FCMService extends FirebaseMessagingService {
@@ -48,7 +51,7 @@ public class FCMService extends FirebaseMessagingService {
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                //scheduleJob();
+                scheduleJob();
             } else {
                 // Handle message within 10 seconds
                 handleNow();
@@ -87,6 +90,10 @@ public class FCMService extends FirebaseMessagingService {
         // [START dispatch_job]
         //OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class).build();
         //WorkManager.getInstance().beginWith(work).enqueue();
+        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(MyWorker.class,
+                8, // repeating interval
+                TimeUnit.HOURS, 15, TimeUnit.MINUTES).build();
+        WorkManager.getInstance().enqueueUniquePeriodicWork("aa-unique-work-fcm", ExistingPeriodicWorkPolicy.KEEP, work);
         // [END dispatch_job]
     }
 
@@ -133,6 +140,7 @@ public class FCMService extends FirebaseMessagingService {
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
+                        //.setColor(getColor(R.color.colorBrown))
                         .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
@@ -141,7 +149,7 @@ public class FCMService extends FirebaseMessagingService {
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
+                    "아아 주문알림",
                     NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -114,9 +115,8 @@ public class OrderFragment extends Fragment {
                         } else if (!recyclerView.canScrollVertically(1)) {
                             Log.i(TAG, "End of list");
                             //리스트 더 보이기
-                            //mListener.onListFragmentInteraction(0);
-                            mListener.onListFragmentInteraction(recyclerView.getAdapter().getItemCount());
-                            //mListener.onListFragmentInteraction(itemcount 끝에크기);
+                            //mListener.onListFragmentInteraction(0); //갱신
+                            recyclerView.getAdapter().notifyDataSetChanged();
                         } else {
                             //Log.i(TAG, "idle");
                         }
